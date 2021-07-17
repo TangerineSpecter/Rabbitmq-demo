@@ -16,7 +16,7 @@ public class Producer {
     /**
      * 队列名称
      */
-    public static final String QUEUE_NAME = "hello";
+    private static final String QUEUE_NAME = "hello";
 
     /**
      * 发消息

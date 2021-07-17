@@ -14,9 +14,15 @@ public class Task01 {
     /**
      * 队列名称
      */
-    public static final String QUEUE_NAME = "hello";
+    private static final String QUEUE_NAME = "hello";
 
-    //发送大量消息
+    /**
+     * 发送大量消息
+     * 启动 Task01,之后启动两个Worker01，发送消息会轮询推送给Worker01消费，优先级不一定，但是一定轮询
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitmqUtils.getChannel();
         //队列的声明

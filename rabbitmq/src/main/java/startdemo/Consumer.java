@@ -14,7 +14,7 @@ public class Consumer {
     /**
      * 队列名称
      */
-    public static final String QUEUE_NAME = "hello";
+    private static final String QUEUE_NAME = "hello";
 
     public static void main(String[] args) throws Exception {
 

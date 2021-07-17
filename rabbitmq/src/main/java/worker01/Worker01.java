@@ -15,7 +15,7 @@ public class Worker01 {
     /**
      * 队列名称
      */
-    public static final String QUEUE_NAME = "hello";
+    private static final String QUEUE_NAME = "hello";
 
     /**
      * 接受消息
