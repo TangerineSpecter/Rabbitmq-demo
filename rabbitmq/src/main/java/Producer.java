@@ -1,6 +1,7 @@
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import util.RabbitmqUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -20,19 +21,9 @@ public class Producer {
      *
      * @param args
      */
-    public static void main(String[] args) throws IOException, TimeoutException {
-        //创建一个连接工厂
-        ConnectionFactory factory = new ConnectionFactory();
-        //工厂IP
-        factory.setHost("127.0.0.1");
-        //用户名
-        factory.setUsername("guest");
-        //密码
-        factory.setPassword("guest");
-        //创建连接
-        Connection connection = factory.newConnection();
-        //获取信道
-        Channel channel = connection.createChannel();
+    public static void main(String[] args) throws Exception {
+
+        Channel channel = RabbitmqUtils.getChannel();
         /**
          * 创建队列
          * 1.队列名称

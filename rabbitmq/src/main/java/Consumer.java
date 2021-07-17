@@ -1,4 +1,5 @@
 import com.rabbitmq.client.*;
+import util.RabbitmqUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -13,14 +14,9 @@ public class Consumer {
      */
     public static final String QUEUE_NAME = "hello";
 
-    public static void main(String[] args) throws IOException, TimeoutException {
+    public static void main(String[] args) throws Exception {
 
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("127.0.0.1");
-        factory.setUsername("guest");
-        factory.setPassword("guest");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+        Channel channel = RabbitmqUtils.getChannel();
 
         //声明 消息本身有消息头 消息体
         DeliverCallback deliverCallback = (consumerTag, message) -> System.out.println("接受到消息:" + new String(message.getBody()));
