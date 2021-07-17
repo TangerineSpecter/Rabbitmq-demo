@@ -1,0 +1,9 @@
+.idea/$PRODUCT_WORKSPACE_FILE$
+.idea/.gitignore
+.idea/compiler.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/libraries/Maven__com_rabbitmq_amqp_client_5_8_0.xml
+.idea/libraries/Maven__commons_io_commons_io_2_6.xml
+.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_29.xml
