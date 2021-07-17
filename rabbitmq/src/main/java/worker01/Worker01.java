@@ -1,4 +1,4 @@
-package worker;
+package worker01;
 
 import com.rabbitmq.client.CancelCallback;
 import com.rabbitmq.client.Channel;
@@ -7,7 +7,8 @@ import util.RabbitmqUtils;
 
 /**
  * 工作线程,相当于消费者
- * 轮询，一个消息只能消费一次
+ * 演示基本的多个工作线程 进行轮询消息消费
+ * 轮询，一个消息只能消费一次，启动Allow parallel run 可以启动多次来达到多个消费者的目的
  */
 public class Worker01 {
 
@@ -31,7 +32,7 @@ public class Worker01 {
             System.out.println("消费消息被中断");
         };
         //消费接收
-        System.out.println("C2等待接受消息...");
+        System.out.println("C1等待接受消息...");
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, cancelCallback);
     }
 }

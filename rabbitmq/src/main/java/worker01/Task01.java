@@ -1,4 +1,4 @@
-package worker;
+package worker01;
 
 import com.rabbitmq.client.Channel;
 import util.RabbitmqUtils;
@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 /**
  * 生产者 负责发送大量消息
+ * 通过控制台输入信息进行消息发送
  */
 public class Task01 {
 
