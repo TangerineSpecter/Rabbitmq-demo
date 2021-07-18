@@ -33,7 +33,7 @@ public class Worker02A {
             channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
         };
         //设置不公平分发 0：轮询；1：不公平，超过1就是预取值
-        channel.basicQos(1);
+        channel.basicQos(2);
         //采用手动应答
         boolean autoAck = false;
         channel.basicConsume(TASK_QUEUE_NAME, autoAck, deliverCallback, consumerTag -> {

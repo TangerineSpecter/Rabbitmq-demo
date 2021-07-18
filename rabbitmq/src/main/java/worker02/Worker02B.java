@@ -34,7 +34,7 @@ public class Worker02B {
             channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
         };
         //设置不公平
-        channel.basicQos(1);
+        channel.basicQos(4);
         //采用手动应答
         boolean autoAck = false;
         channel.basicConsume(TASK_QUEUE_NAME, autoAck, deliverCallback, consumerTag -> {
