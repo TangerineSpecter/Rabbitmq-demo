@@ -1,5 +1,6 @@
 package worker04;
 
+import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import util.RabbitmqUtils;
@@ -18,7 +19,7 @@ public class ReceiveLogs02 {
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitmqUtils.getChannel();
         //声明一个交换机
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+        channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.FANOUT);
         /*
          * 声明一个队列 临时队列
          * 队列名称随机

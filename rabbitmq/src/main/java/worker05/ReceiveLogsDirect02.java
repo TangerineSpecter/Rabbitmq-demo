@@ -1,4 +1,4 @@
-package worker04;
+package worker05;
 
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
@@ -7,19 +7,18 @@ import util.RabbitmqUtils;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * 消息接收
- */
-public class ReceiveLogs01 {
-    /**
-     * 交换机名称
-     */
-    private static final String EXCHANGE_NAME = "logs";
+public class ReceiveLogsDirect02 {
+
+    public static final String EXCHANGE_NAME = "direct_logs";
 
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitmqUtils.getChannel();
+        //声明一个队列
+        channel.queueDeclare("disk", false, false, false, null);
         //声明一个交换机
-        channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.FANOUT);
+        channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
+
+        channel.queueBind("disk", EXCHANGE_NAME, "error");
         /*
          * 声明一个队列 临时队列
          * 队列名称随机
@@ -34,10 +33,10 @@ public class ReceiveLogs01 {
 
         //消息确认成功 回调函数
         DeliverCallback deliverCallback = (consumerTag, message) -> {
-            System.out.println("ReceiveLogs01控制台打印接收到的消息：" + new String(message.getBody(), StandardCharsets.UTF_8));
+            System.out.println("ReceiveLogsDirect01控制台打印接收到的消息：" + new String(message.getBody(), StandardCharsets.UTF_8));
         };
 
-        channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
+        channel.basicConsume("console", true, deliverCallback, consumerTag -> {
         });
     }
 }
