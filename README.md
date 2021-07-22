@@ -32,7 +32,9 @@ raabbitmq消息队列演示
 - worker02：工作线程手动应答、重新入队、消息持久化演示      
 - worker03：消息发布确认的三个方式，单个、批量、异步发布确认
 - worker04：fanout扇型交换机演示
-- worker05：topic主题交换机演示
+- worker05：direct直接交换机演示
+- worker06：topic主题交换机演示
+- worker07：死信队列演示
 
 ---
 
@@ -54,7 +56,7 @@ raabbitmq消息队列演示
 ````
 1.直接（direct）：当消息发送到直接交换机上，会根据绑定队列的routingkey推送匹配的消息。
 2.主题（topic）：将路由键和某模式进行匹配，符号"#"表示一个或者多个词，符号"*"表示一个词。routingkey必须是一个单词。
-3.标题（headers）：
+3.标题（headers）：通过键值对匹配的形式发送消息，不依赖routingKey。all表示多个键值对都要满足，any表示只需要满足其中一个。
 4.扇出（fanout）：当消息发送到扇形交换机上，交换机会将消息路由给所有绑定这个交换机的队列上。
 ````
 
@@ -63,3 +65,10 @@ raabbitmq消息队列演示
     * 创建方式：channel.queueDeclare().getQueue();
 - binding
     * exchange和queue之间的桥梁，能根据routingKey决定和哪个队列绑定
+- 死信队列
+    * 无法被消费的消息
+    * 应用于订单业务消息数据不丢失，当消息异常的时候，将消息投入死信队列
+    * 来源：
+        * 消息TTL过期
+        * 队列达到最大长度
+        * 消息被拒绝
