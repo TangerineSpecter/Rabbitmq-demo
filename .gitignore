@@ -8,3 +8,8 @@
 .idea/libraries/Maven__commons_io_commons_io_2_6.xml
 .idea/libraries/Maven__org_slf4j_slf4j_api_1_7_29.xml
 rabbitmq/target/
+springboot-rabbitmq/.mvn/wrapper/maven-wrapper.jar
+springboot-rabbitmq/.mvn/wrapper/maven-wrapper.properties
+springboot-rabbitmq/.mvn/wrapper/MavenWrapperDownloader.java
+springboot-rabbitmq/mvnw
+springboot-rabbitmq/mvnw.cmd

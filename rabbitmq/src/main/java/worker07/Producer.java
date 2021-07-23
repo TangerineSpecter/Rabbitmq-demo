@@ -19,7 +19,7 @@ public class Producer {
         AMQP.BasicProperties properties = new AMQP.BasicProperties().builder().expiration("10000").build();
         for (int i = 1; i <= 10; i++) {
             String message = "info" + i;
-            channel.basicPublish(NORMAL_EXCHANGE, "zhangsan", properties, message.getBytes());
+            channel.basicPublish(NORMAL_EXCHANGE,   "zhangsan", properties, message.getBytes());
             System.out.println("发送消息：" + message);
         }
     }
