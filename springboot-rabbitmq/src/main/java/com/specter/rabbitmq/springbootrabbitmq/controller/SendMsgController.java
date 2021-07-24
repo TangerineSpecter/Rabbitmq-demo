@@ -34,4 +34,16 @@ public class SendMsgController {
         rabbitTemplate.convertAndSend("X", "XB", "消息来自ttl为40s的队列：" + message);
     }
 
+    /**
+     * 自定义时间消息推送接口
+     */
+        @GetMapping("/sendExpirationMsg/{message}/{ttlTime}")
+    public void sendMsg(@PathVariable String message, @PathVariable String ttlTime) {
+        log.info("当前时间：{},发送一条时长{}毫秒的信息给一个TTL队列：{}", new Date().toString(), ttlTime, message);
+        //进行消息推送
+        rabbitTemplate.convertAndSend("X", "XC", "消息来自ttl为" + ttlTime + "ms的队列：" + message, msg -> {
+            msg.getMessageProperties().setExpiration(ttlTime);
+            return msg;
+        });
+    }
 }

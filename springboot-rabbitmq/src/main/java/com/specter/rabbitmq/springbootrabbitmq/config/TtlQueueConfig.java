@@ -27,8 +27,25 @@ public class TtlQueueConfig {
      */
     private static final String QUEUE_A = "QA";
     private static final String QUEUE_B = "QB";
-    //死信队列的名称
+    /**
+     * 死信队列的名称
+     */
     private static final String DEAD_LETTER_QUEUE = "QD";
+    /**
+     * 普通队列的名称
+     */
+    private static final String QUEUE_C = "QC";
+
+    //声明QC
+    @Bean("queueC")
+    public Queue queueC() {
+        Map<String, Object> arguments = new HashMap<>(3);
+        //设置死信交换机
+        arguments.put("x-dead-letter-exchange", Y_DEAD_LETTER_EXCHANGE);
+        //设置死信RoutingKey
+        arguments.put("x-dead-letter-routing-key", "YD");
+        return QueueBuilder.durable(QUEUE_C).withArguments(arguments).build();
+    }
 
     /**
      * 声明X交换机
@@ -94,12 +111,21 @@ public class TtlQueueConfig {
     }
 
     /**
-     * 队列绑定 QB和X交换机绑定 routingKey=XA
+     * 队列绑定 QB和X交换机绑定 routingKey=XB
      */
     @Bean
     public Binding queueBBindingX(@Qualifier("queueB") Queue queueB,
                                   @Qualifier("xExchange") DirectExchange xExchange) {
         return BindingBuilder.bind(queueB).to(xExchange).with("XB");
+    }
+
+    /**
+     * 队列绑定 QC和X交换机绑定 routingKey=XC
+     */
+    @Bean
+    public Binding queueCBindingX(@Qualifier("queueC") Queue queueC,
+                                  @Qualifier("xExchange") DirectExchange xExchange) {
+        return BindingBuilder.bind(queueC).to(xExchange).with("XC");
     }
 
     /**
