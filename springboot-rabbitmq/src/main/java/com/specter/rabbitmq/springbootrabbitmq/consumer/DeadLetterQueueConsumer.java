@@ -9,13 +9,15 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * 队列TTL 消费者
+ * 延迟队列TTL 消费者
  */
 @Slf4j
 @Component
 public class DeadLetterQueueConsumer {
 
-    //接收消息
+    /**
+     * 监听死信队列QD 接收消息
+     */
     @RabbitListener(queues = "QD")
     public void receiveD(Message message, Channel channel) {
         String msg = new String(message.getBody());
