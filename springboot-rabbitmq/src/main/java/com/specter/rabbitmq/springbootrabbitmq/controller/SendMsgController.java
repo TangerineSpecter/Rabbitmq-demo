@@ -1,5 +1,6 @@
 package com.specter.rabbitmq.springbootrabbitmq.controller;
 
+import com.specter.rabbitmq.springbootrabbitmq.config.DelayedQueueConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class SendMsgController {
     /**
      * 自定义时间消息推送接口
      */
-        @GetMapping("/sendExpirationMsg/{message}/{ttlTime}")
+    @GetMapping("/sendExpirationMsg/{message}/{ttlTime}")
     public void sendMsg(@PathVariable String message, @PathVariable String ttlTime) {
         log.info("当前时间：{},发送一条时长{}毫秒的信息给一个TTL队列：{}", new Date().toString(), ttlTime, message);
         //进行消息推送
@@ -46,4 +47,18 @@ public class SendMsgController {
             return msg;
         });
     }
+
+    /**
+     * 基于插件发送延迟消息
+     */
+    @GetMapping("/sendDelayMsg/{message}/{delayTime}")
+    public void sendMsg(@PathVariable String message, @PathVariable Integer delayTime) {
+        log.info("当前时间：{},发送一条时长{}毫秒的信息给一个延迟队列delayed.queue：{}", new Date().toString(), delayTime, message);
+        //进行消息推送 延迟时长，单位ms
+        rabbitTemplate.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE_NAME, DelayedQueueConfig.DELAYED_ROUTING_KEY, message, msg -> {
+            msg.getMessageProperties().setDelay(delayTime);
+            return msg;
+        });
+    }
+
 }
