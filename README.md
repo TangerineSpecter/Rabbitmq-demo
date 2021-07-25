@@ -81,3 +81,22 @@ raabbitmq消息队列演示
         * 用户发起退款，三天内没处理通知相关运营人员
         * 预定会议，开始时间前10分钟通知各个会议人员
     * 相较于使用定时任务检测，对于数据量比较大，并且时效性很强的场景，轮询是不可取的。所以延迟队列就有用了。
+    * 通过安装插件处理延迟队列排队等待问题
+    
+- 延迟消息插件安装：
+````
+下载地址：
+https://www.rabbitmq.com/community-plugins.html
+
+下载插件：
+rabbitmq_delayed_message_exchange
+
+复制插件到RabbitMQ目录下的plugins文件夹中：
+/usr/local/Cellar/rabbitmq/3.7.16/plugins
+
+安装插件并重启MQ：（提示started 1 plugins 表示安装成功） 
+rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+
+登录后台可看见新增了一个x-delayed-message的交换机。  
+这样就把之前基于死信队列的消息延迟，变成了基于交换机的延迟。
+````

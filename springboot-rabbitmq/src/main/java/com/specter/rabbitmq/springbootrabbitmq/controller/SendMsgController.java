@@ -50,6 +50,7 @@ public class SendMsgController {
 
     /**
      * 基于插件发送延迟消息
+     * 需要安装插件：rabbitmq_delayed_message_exchange ，安装参照ReadME
      */
     @GetMapping("/sendDelayMsg/{message}/{delayTime}")
     public void sendMsg(@PathVariable String message, @PathVariable Integer delayTime) {
