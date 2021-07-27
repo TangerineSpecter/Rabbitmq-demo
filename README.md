@@ -35,6 +35,7 @@ raabbitmq消息队列演示
 - worker05：direct直接交换机演示
 - worker06：topic主题交换机演示
 - worker07：死信队列演示
+- springboot-rabbitmq：集成springboot框架的MQ演示
 
 ---
 
