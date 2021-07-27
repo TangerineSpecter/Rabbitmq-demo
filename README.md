@@ -100,3 +100,13 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 登录后台可看见新增了一个x-delayed-message的交换机。  
 这样就把之前基于死信队列的消息延迟，变成了基于交换机的延迟。
 ````
+
+- 发布确认（避免rabbitMQ重启或者宕机导致消息投递失败、丢失）
+    - 交换机、队列其中一个不存在就会丢失
+    - 通过实现RabbitTemplate.ConfirmCallback进行交换机失败回调处理
+    - 通过实现RabbitTemplate.ReturnsCallback进行队列失败回调处理
+    
+- 备份交换机
+    - 可以让交换机不回退消息给生产者
+    - 无法投递消息的时候发送给备份交换机
+    - 可以用于监控和报警 

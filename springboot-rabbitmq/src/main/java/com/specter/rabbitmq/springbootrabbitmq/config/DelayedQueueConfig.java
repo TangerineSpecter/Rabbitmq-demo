@@ -1,6 +1,7 @@
 package com.specter.rabbitmq.springbootrabbitmq.config;
 
 import com.rabbitmq.client.BuiltinExchangeType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.CustomExchange;
@@ -15,6 +16,7 @@ import java.util.Map;
 /**
  * 延迟队列插件配置
  */
+@Slf4j
 @Configuration
 public class DelayedQueueConfig {
 
@@ -31,7 +33,7 @@ public class DelayedQueueConfig {
      */
     public static final String DELAYED_ROUTING_KEY = "delayed.routingkey";
 
-    @Bean
+    @Bean("delayedQueue")
     public Queue delayedQueue() {
         return new Queue(DELAYED_QUEUE_NAME);
     }
@@ -39,7 +41,7 @@ public class DelayedQueueConfig {
     /**
      * 声明交换机
      */
-    @Bean
+    @Bean("delayedExchange")
     public CustomExchange delayedExchange() {
         Map<String, Object> arguments = new HashMap<>(2);
         arguments.put("x-delayed-type", BuiltinExchangeType.DIRECT);
@@ -60,6 +62,7 @@ public class DelayedQueueConfig {
     @Bean
     public Binding delayedQueueBindingDelayedExchange(@Qualifier("delayedQueue") Queue delayedQueue,
                                                       @Qualifier("delayedExchange") CustomExchange delayedExchange) {
+        log.info("进行交换机{}和队列{}绑定", delayedExchange, delayedQueue);
         return BindingBuilder.bind(delayedQueue).to(delayedExchange).with(DELAYED_ROUTING_KEY).noargs();
     }
 }
