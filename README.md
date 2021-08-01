@@ -35,6 +35,7 @@ raabbitmq消息队列演示
 - worker05：direct直接交换机演示
 - worker06：topic主题交换机演示
 - worker07：死信队列演示
+- worker08：优先级队列演示
 - springboot-rabbitmq：集成springboot框架的MQ演示
 
 ---
@@ -118,3 +119,8 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
     - 消费端幂等性保障
         1. 唯一ID+指纹码机制，利用数据库主键去重，高并发场景下，单个数据库可能会存在写入性能瓶颈
         2. 利用redis原子性实现，setnx分布式锁
+        
+- 优先级队列 （0~255）
+    - 队列需要设置优先级，消息也需要设置优先级
+    - 等消息全部发送到队列中，再进行消费，否则发送一个消费一个没意义。
+    
