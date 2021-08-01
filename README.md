@@ -233,9 +233,19 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
         Name （名字随便起）
         Pattern，规则（^fed.*）
         Apply to : exchanges
-        Definition 策略，federation-upsteam = 上一步起的上游策略名Name
+        Definition 策略，federation-upsteam = 上一步起的上游节点名Name
         ```
         - 处理完成后，在Federation status可以看到状态，看是否添加成功
      
-     
-      
+     - **Federation Queue(联合队列)**  
+        - 消费者达到消息的负载均衡
+        - 搭建步骤
+            - 配置 federation-upsteam，上一步已经做了，这里可以忽略
+            - 添加策略
+        ```xml
+        Name （名字随便起）
+                Pattern，规则（^fed.*）
+                Apply to : queues
+                Definition 策略，federation-upsteam = 上一步起的上游节点名Name
+        ```
+          
