@@ -142,7 +142,7 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
     
 - **RabbitMQ集群**
     - 修改机器名称：vim /etc/hostname，比如有3台，各自命名 node1,node2,node3
-    - 配置每台机器的host：vim /etc/hosts，3台机器都要配置上node1，node2,node3
+    - 配置每台机器的host：vim /etc/hosts，3台机器都要配置上node1,node2,node3
     - 在node1上通过远程命令确保每台机器的cookie是同一个值
     ```xml
     scp /var/lib/rabbitmq/.erlang.cookie root@node2:/var/lib/rabbitmq/.erlang.cookie
@@ -183,3 +183,22 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
     rabbitmqctl cluster_status
     rabbltmqctl forget_cluster_node rabbit@node2 （这段指令在node1主节点上执行）
     ```
+
+- **镜像队列**
+    - 为了避免集群中只有一个broker节点失效或者宕机导致整体服务临时不可用
+    - 镜像队列将集群中队列镜像到其他broker节点上，如果一个节点失效，可以自动切换到集群上的其他节点上保证服务器可用性
+    - 搭建步骤
+        - 启动集群节点
+        - 打开其中一个节点的后台, Admin -> Policies -> Add / update a policy
+        ```xml
+         name (名字随便起，没有意义，只是表示名字)
+         Pattern 规则，^mirror 表示备份以mirror开头的队列
+         Apply to, Exchange and queues 表示交换机和队列都可以
+         Definition 应用的参数: 
+              ha-demo = exactly(备机模式，指令模式)
+              ha-param = 2 (备机参数2份)
+              ha-sync-mode = automatic (同步模式，自动)
+        ```
+        - 之后在任意节点创建一个mirror开头的队列，就随机在其他一个节点镜像一个
+        - 假设在node1上创建了消息队列，那么随机到node2节点上会镜像一个。
+        如果node1宕机了，那么node2又会在node3上镜像一个，直到没有机器可用，否则会一直保存两份。
