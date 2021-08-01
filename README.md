@@ -202,3 +202,40 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
         - 之后在任意节点创建一个mirror开头的队列，就随机在其他一个节点镜像一个
         - 假设在node1上创建了消息队列，那么随机到node2节点上会镜像一个。
         如果node1宕机了，那么node2又会在node3上镜像一个，直到没有机器可用，否则会一直保存两份。
+
+- **Haproxy实现负载均衡**
+    - 扩展Nginx\lvs\Haproxy区别，都可以实现负载均衡
+    - 因为生产者连接服务器集群是固定IP的，所以IP地址服务器挂了没办法变更IP
+    - Haproxy + Keepalive实现高可用高并发负载均衡
+    
+- **Federation Exchange(联合交换机)**
+    - broker北京和broker深圳两个机房相距很远，有网络延迟问题
+    - 北京用户访问北京broker，深圳用户访问深圳broker，通过数据同步来保证机房之间数据一致
+    - 搭建步骤
+        - 保证每台机器节点可用
+        - 每台机器开启federation相关插件
+        ```xml
+        rabbitmq-plugins enable rabbitmq_federation
+        rabbitmq-plugins enable rabbitmq_feaderation_management
+        打开后台Admin界面可以看到新安装的插件
+        ```
+        - 上游数据要往下游走
+        - 同步数据以交换机为节点
+        - node1的数据同步给node2之前，一定要node2有fed_exchange交换机
+        - 创建完交换机之后，下游node2配置上游node1的地址
+        ```xml
+        打开node2后台 admin -> Federation Upstreams -> add a new upstream
+        Name (名字，可以随便起)
+        URI (amqp://账号:密码@节点名) amqp://guest:guest@node1
+        ```
+        - 添加策略
+        ```xml
+        Name （名字随便起）
+        Pattern，规则（^fed.*）
+        Apply to : exchanges
+        Definition 策略，federation-upsteam = 上一步起的上游策略名Name
+        ```
+        - 处理完成后，在Federation status可以看到状态，看是否添加成功
+     
+     
+      
