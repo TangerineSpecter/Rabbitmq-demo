@@ -248,4 +248,24 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
                 Apply to : queues
                 Definition 策略，federation-upsteam = 上一步起的上游节点名Name
         ```
-          
+- **Shovel**
+    - 和Federation数据转发功能类似
+    - Shvel能够负责连接源和目的地、负责消息的读写以及连接失败问题的处理
+    - 源头发送的消息直接会进入到目的地队列，Q1队列的数据会被Shovel同步到Q2
+    - 搭建步骤
+        - 开启插件(所有机器都要开启)
+        ```xml
+        rabbitmq-plugins enable rabbitmq_shovel
+        rabbitmq-plugins enable rabbitmq_shovel_management
+        ```
+        - 安装完毕后，打开后台 Admin -> Shovel Management
+        - 配置源端和目的地
+        ```xml
+        上面是源端
+        配置Name （随便起）
+        URI 源端地址 (amqp://账号:密码@节点名) amqp://guest:guest@node1
+        URI后面是队列名称
+        下面Destination是目的地
+        配置node2 同上
+        比如，源端是北京，目的地是深圳
+        ``` 
