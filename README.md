@@ -38,6 +38,12 @@ RaabbitMq消息队列演示
 - worker07：死信队列演示
 - worker08：优先级队列演示
 - springboot-rabbitmq：集成springboot框架的MQ演示
+    - 延迟队列
+    - 自定义延迟队列
+    - 延迟队列插件
+    - 消息确认
+    - 消息回退
+    - 备份交换机
 
 ---
 
@@ -134,3 +140,46 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
     - 一百万条消息，1条占用1kb，普通队列占用内存1.2G，而惰性队列只占用1.5MB，因为消息存储在磁盘中。
     - 通过arguments.put("x-queue-mode","lazy")使用;
     
+- **RabbitMQ集群**
+    - 修改机器名称：vim /etc/hostname，比如有3台，各自命名 node1,node2,node3
+    - 配置每台机器的host：vim /etc/hosts，3台机器都要配置上node1，node2,node3
+    - 在node1上通过远程命令确保每台机器的cookie是同一个值
+    ```xml
+    scp /var/lib/rabbitmq/.erlang.cookie root@node2:/var/lib/rabbitmq/.erlang.cookie
+    node3更换名称同理
+    之后每台机器都要重启
+    rabbitmq-server -detached
+    ``` 
+    - 节点2执行
+    ```xml
+    rabbitmq stop_app 关闭RabbitMQ服务
+    (rabbitmqctl stop 停止Erlang虚拟机，这个不用执行)
+    rabbitmqctl join_cluster rabbit@node1
+    rabbitmqctl start_app
+    ``` 
+    - 节点3同上，将第三个指令改成加入到node2节点
+    - 集群状态查询（Disk Nodes展示当前集群，Running表示运行的节点，Cluster name显示当前节点名称）
+    ```xml
+    rabbitmqctl cluster_status
+    ```
+    - 创建账号
+   ```xml
+    rabbitmqctl add_user admin 123
+    ```
+    - 设置用户角色
+    ```xml
+    rabbitmqctl set_user_tags admin administrator
+    ```
+    - 设置用户权限
+    ```xml
+    rabbitmqctl set_permission -p "/" admin ".*" ".*" ".*"
+    ```
+    - 登录RabbitMQ后台，首页Nodes展示有当前集群节点
+    - 解除集群节点(每个节点各自执行)
+    ```xml
+    rabbitmqctl stop_app
+    rabbitmqctl reset
+    rabbitmqctl start_app
+    rabbitmqctl cluster_status
+    rabbltmqctl forget_cluster_node rabbit@node2 （这段指令在node1主节点上执行）
+    ```
